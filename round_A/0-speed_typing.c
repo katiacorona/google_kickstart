@@ -5,7 +5,9 @@
 int is_possible(char *I, char *P)
 {
 	int i = strlen(I), p = strlen(P), n = 0;
-
+	/* n is a counter for the number of deletions to be made on P so that
+	 * it matches I string.
+	 */
 	printf("I len = %i P len = %i\n", i, p);
 	if (P == NULL || I == NULL)
 	{
@@ -46,11 +48,12 @@ int main(void)
 	P = "IIllovecoding";
 	printf("Case %i: I = %s P = %s\n", case_n, I, P);
 	result = is_possible(I, P);
-	if (result == -1)
+	if (result == -1) /* If P cannot match I, even with deletions */
 	{
 		printf("Case #%i: %s\n", case_n, aux);
 		return (1);
 	}
 	printf("Case #%i: %i\n", case_n, result);
+	/* P can match I, or is equal to I (returned 0 or a positive int) */
 	return (0);
 }
