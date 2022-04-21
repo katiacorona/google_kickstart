@@ -1,10 +1,17 @@
 # ignore ALL .log files
 *.log
 
+# ignore ALL .txt files
+*.txt
+
 # ignore ALL files in ANY directory named temp
 temp/
 test/
 
 # ignore executables
+speed
 1speed
 test_file
+2speed
+3speed
+4speed

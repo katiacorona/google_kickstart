@@ -25,15 +25,9 @@ int is_possible(char *s1, char *s2)
 		while (p >= 0)
 		{
 			if ((s2[p] != s1[i]) && (p == i))
-			{
-				printf("Deleted --> %c\n", s2[p]);
 				return (-1); /* IMPOSSIBLE */
-			}
 			else if (s2[p] != s1[i])
-			{
-				printf("Deleted --> %c\n", s2[p]);
 				n++;
-			}
 			else
 				i--;
 			p--;
@@ -58,7 +52,7 @@ char *create_buffer(char *file)
 int main(int argc, char **argv)
 {
 	char *line_buffer = NULL, *s[2], *cases;
-	int line_count = 0, c, case_num = 0, result;
+	int line_count, c, case_num = 0, result;
 	size_t line_bufsize = 0;
 	ssize_t line_size;
 	FILE *fp;
@@ -74,29 +68,27 @@ int main(int argc, char **argv)
 	cases = malloc((line_size + 1) * sizeof(char));
 	strcpy(cases, line_buffer);
 	cases = strtok(cases, "\n");
-	c = atoi(cases);
+	c = atoi(cases); /* Number of cases in the file */
 	printf("Number of cases in the file: %i\n", c);
-	while (line_size > 0)
+	while (case_num < c)
 	{
-		line_size = getline(&line_buffer, &line_bufsize, fp);
-		s[line_count] = malloc((line_size + 1) * sizeof(char));
-		strcpy(s[line_count], line_buffer);
-		line_count++;
 		case_num++;
-		/* printf("%s\n", line_buffer); */
+		line_count = 0;
+		while (line_count < 2)
+		{
+			line_size = getline(&line_buffer, &line_bufsize, fp);
+			s[line_count] = malloc((line_size + 1) * sizeof(char));
+			strcpy(s[line_count], line_buffer);
+			s[line_count] = strtok(s[line_count], "\n");
+			line_count++;
+		}
+		result = is_possible(s[0], s[1]);
+        	if (result == -1) /* If P cannot match I, even with deletions */
+                	printf("Case #%i: IMPOSSIBLE\n", case_num);
+		else
+        		printf("Case #%i: %i\n", case_num, result);
+        	/* P can match I, or is equal to I (returned 0 or a positive int) */
 	}
-	s[0] = strtok(s[0], "\n");
-	s[1] = strtok(s[1], "\n");
-	result = is_possible(s[0], s[1]);
-        if (result == -1) /* If P cannot match I, even with deletions */
-        {
-                printf("Case #%i: IMPOSSIBLE\n", case_num);
-                return (1);
-        }
-        printf("Case #%i: %i\n", case_num, result);
-        /* P can match I, or is equal to I (returned 0 or a positive int) */
-
-	printf("%s\n%s\n", s[0], s[1]);
 
 	free(line_buffer);
 	free(s[0]);
