@@ -1,9 +1,6 @@
 /**
- * 04/17/2022
- * Note: Managed to work with the example input provided inside the main func-
- * tion, and now we need to obtain the contents from a file. The first line
- * from this file contains the number of lines to be read. Need to take line 0
- * and atoi it to get the number of lines to be read.
+ * 04/21/2022
+ * Note:
  */
 
 #include <stdio.h>
@@ -13,10 +10,10 @@
 
 int is_possible(char *s1, char *s2)
 {
-	int i = strlen(I), p = strlen(P), n = 0;
+	int i = strlen(s1), p = strlen(s2), n = 0;
 
 	printf("I len = %i P len = %i\n", i, p);
-	if (P == NULL || I == NULL)
+	if (s2 == NULL || s1 == NULL)
 	{
 		perror("Error:\n");
 		exit(1); /* Error */
@@ -27,14 +24,14 @@ int is_possible(char *s1, char *s2)
 	{
 		while (p >= 0)
 		{
-			if ((P[p] != I[i]) && (p == i))
+			if ((s2[p] != s1[i]) && (p == i))
 			{
-				printf("Deleted --> %c\n", P[p]);
+				printf("Deleted --> %c\n", s2[p]);
 				return (-1); /* IMPOSSIBLE */
 			}
-			else if (P[p] != I[i])
+			else if (s2[p] != s1[i])
 			{
-				printf("Deleted --> %c\n", P[p]);
+				printf("Deleted --> %c\n", s2[p]);
 				n++;
 			}
 			else
@@ -52,7 +49,7 @@ char *create_buffer(char *file)
 	buffer = malloc(sizeof(char) * 1024);
 	if (buffer == NULL)
 	{
-		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", file);
+		printf("Error: Can't write to %s\n", file);
 		exit(1);
 	}
 	return (buffer);
@@ -60,26 +57,34 @@ char *create_buffer(char *file)
 
 int main(int argc, char **argv)
 {
-	char *lines[], *buffer;
-	int case_n, lines_n, result;
-
-	FILE * fin = fopen(argv[1], "r");
-
-	buffer = create_buffer(argv[1]);
+	char *line_buffer = NULL, *s[2];
+	int line_count = 0;
+	size_t line_bufsize = 0;
+	ssize_t line_size;
+	FILE *fp;
 
 	if (argc != 2)
 	{
-		dprintf(2, "Usage: %s filename\n", av[0]);
+		printf("Usage: %s <filename>\n", argv[0]);
 		exit(1);
 	}
-
-	printf("Case %i: I = %s P = %s\n", case_n, I, P);
-	result = is_possible(I, P);
-	if (result == -1)
+	fp = fopen(argv[1], "r");
+	while (line_size > 0)
 	{
-		printf("Case #%i: IMPOSSIBLE\n", case_n);
-		return (1);
+		line_size = getline(&line_buffer, &line_bufsize, fp);
+		s[line_count] = malloc((line_size + 1) * sizeof(char));
+		strcpy(s[line_count], line_buffer);
+		line_count++;
+		/* printf("%s\n", line_buffer); */
 	}
-	printf("Case #%i: %i\n", case_n, result);
+	s[0] = strtok(s[0], "\n");
+	s[1] = strtok(s[1], "\n");
+	is_possible(s[0], s[1]);
+	printf("%s\n%s\n", s[0], s[1]);
+
+	free(line_buffer);
+	free(s[0]);
+	free(s[1]);
+	fclose(fp);
 	return (0);
 }
