@@ -36,17 +36,8 @@ int main(int argc, char **argv)
 	int line_count, c, case_num = 0, result;
 	size_t line_bufsize = 0;
 	ssize_t line_size;
-	FILE *fp;
 
-	if (argc != 2)
-	{
-		printf("Usage: %s <filename>\n", argv[0]);
-		exit(1);
-	}
-
-	fp = fopen(argv[1], "r");
-
-	line_size = getline(&line_buffer, &line_bufsize, fp);
+	line_size = getline(&line_buffer, &line_bufsize, stdin);
 	cases = malloc((line_size + 1) * sizeof(char));
 	strcpy(cases, line_buffer);
 	cases = strtok(cases, "\n");
@@ -57,7 +48,7 @@ int main(int argc, char **argv)
 		line_count = 0;
 		while (line_count < 2)
 		{
-			line_size = getline(&line_buffer, &line_bufsize, fp);
+			line_size = getline(&line_buffer, &line_bufsize, stdin);
 			s[line_count] = malloc((line_size + 1) * sizeof(char));
 			strcpy(s[line_count], line_buffer);
 			s[line_count] = strtok(s[line_count], "\n");
@@ -73,6 +64,5 @@ int main(int argc, char **argv)
 	free(line_buffer);
 	free(s[0]);
 	free(s[1]);
-	fclose(fp);
 	exit(0);
 }

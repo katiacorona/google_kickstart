@@ -9,11 +9,12 @@ temp/
 test/
 
 # ignore executables
-speed
+0speed
 1speed
-test_file
 2speed
 3speed
 4speed
+5speed
 test_1
 test_2
+test_file
